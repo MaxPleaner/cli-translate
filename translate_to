@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'colored'
+
+# Get arguments and do a little validation
+lang, *phrases = ARGV
+raise(RuntimeError, "lang can't be empty") if (lang||[]).empty?
+raise(RuntimeError, "phrase can't be empty") if phrases.empty?
+
+# pass phrases along as arguments
+phrases_args = phrases.map { |phrase| %{"#{phrase}"} }.join(" ")
+
+# Get the result without details
+brief_result = `trans -b -t #{lang} #{phrases_args}`
+
+# speak the brief result
+`trans -sp -b -t #{lang} -s #{lang} "#{brief_result}"`
+
+# Get and print the full result
+puts `trans -t #{lang} #{phrases_args}`
+
+# print the brief result at the en d
+puts brief_result.green
+
+# feed it back into the translator for shits
+reverse_arg = brief_result.split("\n").join(" ")
+reverse_translation =  `trans -b -t en -s #{lang} "#{reverse_arg}"`
+puts "reverse translation: "
+puts reverse_translation.blue
+
