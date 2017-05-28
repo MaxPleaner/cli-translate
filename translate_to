@@ -23,8 +23,9 @@ puts `trans -t #{lang} #{phrases_args}`
 puts brief_result.green
 
 # feed it back into the translator for shits
-reverse_arg = brief_result.split("\n").join(" ")
-reverse_translation =  `trans -b -t en -s #{lang} "#{reverse_arg}"`
-puts "reverse translation: "
-puts reverse_translation.blue
-
+unless lang == "en"
+  reverse_arg = brief_result.split("\n").join(" ")
+  reverse_translation =  `trans -b -t en -s #{lang} "#{reverse_arg}"`
+  puts "reverse translation: "
+  puts reverse_translation.blue
+end
